@@ -1,0 +1,15 @@
+ALUR KLINIK
+
+Daftar Pasien
+|
+cek jika belum ada
+|
+tambah pasien
+|
+tindakan dokter
+|
+memasukkan biaya layanan
+|
+memasukkan resep/obat
+|
+transaksi pembayaran(kasir)
