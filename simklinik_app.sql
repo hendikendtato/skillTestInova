@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `backend_users` (
   `password` varchar(255) NOT NULL,
   `authkey` char(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `detail_obat` (
   KEY `FK2_obat` (`id_obat`),
   CONSTRAINT `FK2_obat` FOREIGN KEY (`id_obat`) REFERENCES `m_obat` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Pemeriksaan` FOREIGN KEY (`id_pemeriksaan`) REFERENCES `pemeriksaan` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -223,8 +223,9 @@ CREATE TABLE IF NOT EXISTS `pembayaran` (
   `total` double DEFAULT NULL,
   `bayar` double DEFAULT NULL,
   `kembalian` double DEFAULT NULL,
+  `tgl_pembayaran` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -240,6 +241,7 @@ CREATE TABLE IF NOT EXISTS `pemeriksaan` (
   `diagnosa` varchar(255) DEFAULT NULL,
   `tindakan` int DEFAULT NULL,
   `biaya_tindakan` double DEFAULT NULL,
+  `status` enum('Aktif','Selesai') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'Aktif',
   PRIMARY KEY (`id`),
   KEY `FK_Pendaftaran` (`pendaftaran`),
   KEY `FK_Tindakan` (`tindakan`),
@@ -247,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `pemeriksaan` (
   CONSTRAINT `FK_PegawaiDokter` FOREIGN KEY (`dokter`) REFERENCES `m_pegawai` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Pendaftaran` FOREIGN KEY (`pendaftaran`) REFERENCES `pendaftaran_pasien` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Tindakan` FOREIGN KEY (`tindakan`) REFERENCES `m_tindakan` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -258,11 +260,11 @@ CREATE TABLE IF NOT EXISTS `pendaftaran_pasien` (
   `nomor_pendaftaran` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `pasien` int NOT NULL,
   `tgl_daftar` date NOT NULL,
-  `status` enum('Aktif','Selesai') NOT NULL,
+  `status` enum('Aktif','Selesai') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'Aktif',
   PRIMARY KEY (`id`),
   KEY `FK_Pasien` (`pasien`),
   CONSTRAINT `FK_Pasien` FOREIGN KEY (`pasien`) REFERENCES `m_pasien` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 

@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\BackendUser $model */
 
-$this->title = 'Create Backend User';
-$this->params['breadcrumbs'][] = ['label' => 'Backend Users', 'url' => ['index']];
+$this->title = 'Tambah Pengguna';
+$this->params['breadcrumbs'][] = ['label' => 'Pengguna', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="backend-user-create">

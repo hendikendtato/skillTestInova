@@ -55,6 +55,13 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'Tindakan Dokter', 'url' => ['/pemeriksaan/index']],
             ['label' => 'Pembayaran', 'url' => ['/pembayaran/index']],
             ['label' => 'Laporan', 'url' => ['/site/laporan']],
+            [
+                'label' => 'Manajemen',
+                'items' => [
+                     ['label' => 'Pengguna', 'url' => ['/backend-user/index']],
+                     ['label' => 'Hak Akses', 'url' => ['/admin']],
+                ],
+            ],
             Yii::$app->user->isGuest ? 
                 ['label' => 'Login', 'url' => ['/site/login']]
                 : '<li class="nav-item">'

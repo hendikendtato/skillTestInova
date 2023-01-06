@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\BackendUser $model */
 
-$this->title = 'Update Backend User: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Backend Users', 'url' => ['index']];
+$this->title = 'Ubah Pengguna';
+$this->params['breadcrumbs'][] = ['label' => 'Pengguna', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
