@@ -4,9 +4,15 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use mdm\widgets\GridInput;
 use yii\helpers\ArrayHelper;
+use yii\jui\AutoComplete;
+use yii\web\JsExpression;
 
 use app\models\MObat;
 use app\models\PendaftaranPasien;
+use app\models\MPegawai;
+use app\models\MPasien;
+use app\models\MTindakan;
+use kartik\date\DatePicker;
 
 /** @var yii\web\View $this */
 /** @var app\models\MPemeriksaan $model */
@@ -14,6 +20,10 @@ use app\models\PendaftaranPasien;
 
 $Obat = ArrayHelper::map(MObat::find()->asArray()->all(), 'id', 'nama_obat');
 $n_pendaftaran = ArrayHelper::map(PendaftaranPasien::find()->where(['=', 'status', 'Aktif'])->asArray()->all(), 'id', 'nomor_pendaftaran');
+$dokter = ArrayHelper::map(MPegawai::find()->leftjoin('m_jabatan', 'm_pegawai.jabatan = m_jabatan.id')->where(['like', 'm_jabatan.jabatan', 'dokter'])->asArray()->all(), 'id', 'nama_lengkap');
+$pasien = ArrayHelper::map(MPasien::find()->asArray()->all(), 'id', 'nama_pasien');
+$tindakan = ArrayHelper::map(MTindakan::find()->asArray()->all(), 'id', 'tindakan');
+
 ?>
 
 <div class="mpemeriksaan-form">
@@ -30,26 +40,71 @@ $n_pendaftaran = ArrayHelper::map(PendaftaranPasien::find()->where(['=', 'status
             ?>
         </div>
     </div>
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-md-6">
             <?= $form->field($model, 'nomor_pemeriksaan')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-6">
-            <?= $form->field($model, 'tgl_pemeriksaan')->textInput() ?>
+            <?php //$form->field($model, 'tgl_pemeriksaan')->textInput() ?>
+            <?=
+                $form->field($model, 'tgl_pemeriksaan')->widget(DatePicker::classname(), [
+                    'options' => ['placeholder' => 'Pilih tanggal ...'],
+                    'type' => DatePicker::TYPE_INPUT,
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'autoclose' => true
+                    ]
+                ]);
+            ?>
         </div>
     </div>
 
+    <div class="row mb-3">
+        <?php //$form->field($model, 'pasien')->textInput() ?>
+        <?=
+            $form->field($model, 'pasien')->dropDownList(
+                $pasien,
+                [
+                    'prompt'=>'Nama Pasien',
+                ]
+            );
+        ?>
+    </div>
+    
+    <div class="row mb-3">
+        <?php //$form->field($model, 'dokter')->textInput() ?>
+        <?=
+            $form->field($model, 'dokter')->dropDownList(
+                $dokter,
+                [
+                    'prompt'=>'Select...',
+                ],
+                
+            );
+        ?>
+    </div>
 
+    <div class="row mb-3">
+        <?= $form->field($model, 'diagnosa')->textInput(['maxlength' => true]) ?>
+    </div>
 
-    <?= $form->field($model, 'pasien')->textInput() ?>
-
-    <?= $form->field($model, 'dokter')->textInput() ?>
-
-    <?= $form->field($model, 'diagnosa')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'tindakan')->textInput() ?>
-
-    <?= $form->field($model, 'biaya_tindakan')->textInput() ?>
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <?php //$form->field($model, 'tindakan')->textInput() ?>
+            <?=
+                $form->field($model, 'tindakan')->dropDownList(
+                    $tindakan,
+                    [
+                        'prompt'=>'Select...',
+                    ],
+                    
+                );
+            ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'biaya_tindakan')->textInput() ?>
+        </div>
+    </div>
 
     <div class="form-group">
         <?=
@@ -79,5 +134,55 @@ $n_pendaftaran = ArrayHelper::map(PendaftaranPasien::find()->where(['=', 'status
     </div>
 
     <?php ActiveForm::end(); ?>
+
+    <?php 
+        $script = <<< JS
+        // Set autofill pasien
+        $('#mpemeriksaan-pendaftaran').change(function(){
+            var nomor_pendaftaran = $(this).val();
+            $.get('/skilltest_simklinik/web/pemeriksaan/ambil-pasien?id='+nomor_pendaftaran, function(data){
+                var data = $.parseJSON(data);
+                console.log(data);
+                $('#mpemeriksaan-pasien').val(data.id);
+            });
+        });
+
+        // Set autofill biaya tindakan
+        $('#mpemeriksaan-tindakan').change(function(){
+            var id_tindakan = $(this).val();
+            $.get('/skilltest_simklinik/web/pemeriksaan/set-biaya?id='+id_tindakan, function(data){
+                var data = $.parseJSON(data);
+                $('#mpemeriksaan-biaya_tindakan').val(data.biaya);
+            });
+        });
+
+        $("select[class='form-control']").change(function(){
+            // var id_tindakan = $(this).closest('tr').find('td select [data-field="id_obat"]').val(data);
+            alert("Bisaa");
+            // $.get('/skilltest_simklinik/web/pemeriksaan/set-biaya?id='+id_tindakan, function(data){
+            //     var data = $.parseJSON(data);
+            //     $('#mpemeriksaan-biaya_tindakan').val(data.biaya);
+            // });
+        });
+        $("#w1 tbody #mdetailobat-0-jumlah").change(function(){
+            // var id_tindakan = $(this).closest('tr').find('td select [data-field="id_obat"]').val(data);
+            alert("Bisaa");
+            // $.get('/skilltest_simklinik/web/pemeriksaan/set-biaya?id='+id_tindakan, function(data){
+            //     var data = $.parseJSON(data);
+            //     $('#mpemeriksaan-biaya_tindakan').val(data.biaya);
+            // });
+        });
+
+        $('#mpemeriksaan-pasien').prop('disabled', true);
+        $('#mpemeriksaan-biaya_tindakan').prop('disabled', true);
+        
+        $('form').on('submit', function() {
+            $('#mpemeriksaan-pasien').prop('disabled', false);
+            $('#mpemeriksaan-biaya_tindakan').prop('disabled', false);
+        });
+        
+        JS;
+        $this->registerJs($script);
+    ?>
 
 </div>

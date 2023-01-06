@@ -52,8 +52,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 ],
             ],
             ['label' => 'Pendaftaran Pasien', 'url' => ['/pendaftaran-pasien/index']],
-            ['label' => 'Tindakan Dokter', 'url' => ['/site/about']],
-            ['label' => 'Pembayaran', 'url' => ['/site/contact']],
+            ['label' => 'Tindakan Dokter', 'url' => ['/pemeriksaan/index']],
+            ['label' => 'Pembayaran', 'url' => ['/pembayaran/index']],
             Yii::$app->user->isGuest ? 
                 ['label' => 'Login', 'url' => ['/site/login']]
                 : '<li class="nav-item">'
@@ -96,4 +96,18 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
 <script>
     $("#w1-add-button").append("Tambah +");
+
+    $('#w1-add-button').click(function(){
+        $("a[data-action='delete']").html('<a href="#" data-action="delete">Delete</a>');
+    });
+
+    $("#mdetailobat-0-id_obat").change(function(){
+            // var id_tindakan = $(this).closest('tr').find('td select [data-field="id_obat"]').val(data);
+            console.log("Tess");
+            // $.get('/skilltest_simklinik/web/pemeriksaan/set-biaya?id='+id_tindakan, function(data){
+            //     var data = $.parseJSON(data);
+            //     $('#mpemeriksaan-biaya_tindakan').val(data.biaya);
+            // });
+        });
+
 </script>

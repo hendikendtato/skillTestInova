@@ -2,16 +2,18 @@
 
 namespace app\controllers;
 
-use app\models\PendaftaranPasien;
-use app\models\PendaftaranPasienSearch;
+use app\models\MPembayaran;
+use app\models\MDetailObat;
+use app\models\PembayaranSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
 
 /**
- * PendaftaranPasienController implements the CRUD actions for PendaftaranPasien model.
+ * PembayaranController implements the CRUD actions for MPembayaran model.
  */
-class PendaftaranPasienController extends Controller
+class PembayaranController extends Controller
 {
     /**
      * @inheritDoc
@@ -32,13 +34,13 @@ class PendaftaranPasienController extends Controller
     }
 
     /**
-     * Lists all PendaftaranPasien models.
+     * Lists all MPembayaran models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new PendaftaranPasienSearch();
+        $searchModel = new PembayaranSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -48,7 +50,7 @@ class PendaftaranPasienController extends Controller
     }
 
     /**
-     * Displays a single PendaftaranPasien model.
+     * Displays a single MPembayaran model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -61,13 +63,13 @@ class PendaftaranPasienController extends Controller
     }
 
     /**
-     * Creates a new PendaftaranPasien model.
+     * Creates a new MPembayaran model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new PendaftaranPasien();
+        $model = new MPembayaran();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -83,7 +85,7 @@ class PendaftaranPasienController extends Controller
     }
 
     /**
-     * Updates an existing PendaftaranPasien model.
+     * Updates an existing MPembayaran model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -103,7 +105,7 @@ class PendaftaranPasienController extends Controller
     }
 
     /**
-     * Deletes an existing PendaftaranPasien model.
+     * Deletes an existing MPembayaran model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -117,24 +119,26 @@ class PendaftaranPasienController extends Controller
     }
 
     /**
-     * Finds the PendaftaranPasien model based on its primary key value.
+     * Finds the MPembayaran model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return PendaftaranPasien the loaded model
+     * @return MPembayaran the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = PendaftaranPasien::findOne(['id' => $id])) !== null) {
+        if (($model = MPembayaran::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionAmbilPasien($id){
-        $location = PendaftaranPasien::findOne(['id' => $id]);
-        // print_r($location); die;
-        echo Json::encode($location);
+    public function actionDetail($id)
+    {
+        $detail = MDetailObat::find()->select(['m_obat.nama_obat', 'detail_obat.*'])->leftjoin('m_obat', 'm_obat.id = detail_obat.id_obat')->where(['detail_obat.id_pemeriksaan' => $id])->all();
+
+        // print_r($pasien->nama_pasien); die;
+        echo Json::encode($detail);
     }
 }

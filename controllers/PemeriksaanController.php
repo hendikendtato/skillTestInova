@@ -3,11 +3,15 @@
 namespace app\controllers;
 
 use app\models\MPemeriksaan;
+use app\models\PendaftaranPasien;
+use app\models\MPasien;
+use app\models\MTindakan;
 use app\models\PemeriksaanSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Yii;
+use yii\helpers\Json;
 /**
  * PemeriksaanController implements the CRUD actions for MPemeriksaan model.
  */
@@ -149,5 +153,21 @@ class PemeriksaanController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionAmbilPasien($id){
+        $pendaftaran = PendaftaranPasien::findOne(['id' => $id]);
+
+        $pasien = MPasien::findOne(['id' => $pendaftaran->pasien]);
+
+        // print_r($pasien->nama_pasien); die;
+        echo Json::encode($pasien);
+    }
+
+    public function actionSetBiaya($id){
+        $tindakan = MTindakan::findOne(['id' => $id]);
+
+        // print_r($pasien->nama_pasien); die;
+        echo Json::encode($tindakan);
     }
 }

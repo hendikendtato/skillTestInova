@@ -112,4 +112,8 @@ class MPemeriksaan extends \yii\db\ActiveRecord
     {
         return $this->hasOne(MTindakan::class, ['id' => 'tindakan']);
     }
+    public function getPasien0()
+    {
+        return $this->hasOne(MPasien::class, ['id' => 'pasien']);
+    }
 }
