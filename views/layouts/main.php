@@ -32,7 +32,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <header id="header">
     <?php
     NavBar::begin([
-        'brandLabel' => "SIM Klinik",
+        'brandLabel' => "Sistem Informasi Klinik",
         'brandUrl' => Yii::$app->homeUrl,
         'options' => ['class' => 'navbar navbar-expand-md navbar-dark bg-primary fixed-top']
     ]);
@@ -96,19 +96,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <?php $this->endPage() ?>
 
 <script>
-    $("#w1-add-button").append("Tambah +");
+    $("#w1-add-button").append('<button type="button" class="btn btn-info btn-sm">+</button>');
 
     $('#w1-add-button').click(function(){
         $("a[data-action='delete']").html('<a href="#" data-action="delete">Delete</a>');
     });
-
-    $("#mdetailobat-0-id_obat").change(function(){
-            // var id_tindakan = $(this).closest('tr').find('td select [data-field="id_obat"]').val(data);
-            console.log("Tess");
-            // $.get('/skilltest_simklinik/web/pemeriksaan/set-biaya?id='+id_tindakan, function(data){
-            //     var data = $.parseJSON(data);
-            //     $('#mpemeriksaan-biaya_tindakan').val(data.biaya);
-            // });
-        });
 
 </script>

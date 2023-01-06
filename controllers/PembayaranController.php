@@ -11,6 +11,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
+use Yii;
 
 /**
  * PembayaranController implements the CRUD actions for MPembayaran model.
@@ -74,7 +75,13 @@ class PembayaranController extends Controller
         $model = new MPembayaran();
 
         if ($this->request->isPost) {
+                // die;
             if ($model->load($this->request->post()) && $model->save()) {
+                $id_pemeriksaan = Yii::$app->request->post('MPembayaran', []);
+                Yii::$app->db->createCommand()
+                                ->update('pemeriksaan', ['status' => 'Selesai'], 'id = '.$id_pemeriksaan['nomor_pemeriksaan'].'')
+                                ->execute();
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {

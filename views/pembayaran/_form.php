@@ -13,7 +13,7 @@ use app\models\MPasien;
 /** @var yii\widgets\ActiveForm $form */
 
 $pasien = ArrayHelper::map(MPasien::find()->asArray()->all(), 'id', 'nama_pasien');
-$pemeriksaan = ArrayHelper::map(MPemeriksaan::find()->asArray()->all(), 'id', 'nomor_pemeriksaan');
+$pemeriksaan = ArrayHelper::map(MPemeriksaan::find()->where('status = "Aktif"')->asArray()->all(), 'id', 'nomor_pemeriksaan');
 
 ?>
 
@@ -50,6 +50,8 @@ $pemeriksaan = ArrayHelper::map(MPemeriksaan::find()->asArray()->all(), 'id', 'n
             <?= $form->field($model, 'bayar')->textInput() ?>
         
             <?= $form->field($model, 'kembalian')->textInput() ?>
+
+            <?= $form->field($model, 'tgl_pembayaran')->textInput([ 'readonly'=>'true' ,'value'=> date('Y-m-d') ]) ?>
         
             <div class="form-group">
                 <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

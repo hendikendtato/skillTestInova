@@ -14,7 +14,7 @@ $pendapatan = MPembayaran::find()->select(['tgl_pembayaran, SUM(total) AS total'
 
 $total_pendapatan = MPembayaran::find()->select(['SUM(total) AS total'])->where('tgl_pembayaran = "'.date("Y-m-d").'"')->all();
 $transaksi = MPembayaran::find()->select(['COUNT(id) AS jumlah_transaksi'])->where('tgl_pembayaran = "'.date("Y-m-d").'"')->asArray()->all();
-$pasien = MPembayaran::find()->select(['COUNT(pasien) AS jumlah_pasien'])->where('tgl_pembayaran = "'.date("Y-m-d").'"')->groupBy(['pasien'])->asArray()->all();
+$pasien = MPembayaran::find()->select(['COUNT(pasien) AS jumlah_pasien'])->where('tgl_pembayaran = "'.date("Y-m-d").'"')->asArray()->all();
 
 foreach ($pendapatan as $value) {
     $data[] = (int)$value['total'];
@@ -32,7 +32,7 @@ foreach ($pendapatan as $value) {
         <div class="card" style="height: 9rem;">
             <div class="card-body">
                 <h5 class="card-title">Transaksi</h5>
-                <h3 class="mt-4"><b><?= $transaksi[0]['jumlah_transaksi'] ?></b></h3>
+                <h3 class="mt-4"><b><?= ($transaksi[0]['jumlah_transaksi']) ? $transaksi[0]['jumlah_transaksi'] : 0 ?></b></h3>
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@ foreach ($pendapatan as $value) {
         <div class="card" style="height: 9rem;">
             <div class="card-body">
                 <h5 class="card-title">Pasien</h5>
-                <h3 class="mt-4"><b><?= $pasien[0]['jumlah_pasien'] ?></b></h3>
+                <h3 class="mt-4"><b><?= ($pasien) ? $pasien[0]['jumlah_pasien'] : 0 ?></b></h3>
             </div>
         </div>
     </div>
@@ -48,7 +48,7 @@ foreach ($pendapatan as $value) {
         <div class="card" style="height: 9rem;">
             <div class="card-body">
                 <h5 class="card-title">Pendapatan</h5>
-                <h3 class="mt-4"><b>Rp <?= number_format($total_pendapatan[0]['total']) ?></b></h3>
+                <h3 class="mt-4"><b>Rp <?= number_format((($total_pendapatan[0]['total']) ? $total_pendapatan[0]['total'] : 0)) ?></b></h3>
             </div>
         </div>
     </div>

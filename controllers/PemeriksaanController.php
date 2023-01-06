@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\MPemeriksaan;
 use app\models\PendaftaranPasien;
 use app\models\MPasien;
+use app\models\MObat;
 use app\models\MTindakan;
 use app\models\PemeriksaanSearch;
 use yii\web\Controller;
@@ -79,6 +80,21 @@ class PemeriksaanController extends Controller
                 $model->detailObats = Yii::$app->request->post('MDetailObat', []);
                 if ($model->save()) {
                     $transaction->commit();
+                    $detail_obat = Yii::$app->request->post('MDetailObat', []);
+
+                    foreach ($detail_obat as $value) {
+                        $stok_lama = MObat::findOne(['id' => $value['id_obat']]);
+                        $stok_baru = $stok_lama['stok'] - $value['jumlah'];
+                        Yii::$app->db->createCommand()
+                                 ->update('m_obat', ['stok' => $stok_baru], 'id = '.$value['id_obat'].'')
+                                 ->execute();
+                    }
+
+                    $id_pendaftaran = Yii::$app->request->post('MPemeriksaan', []);
+                    Yii::$app->db->createCommand()
+                                 ->update('pendaftaran_pasien', ['status' => 'Selesai'], 'id = '.$id_pendaftaran['pendaftaran'].'')
+                                 ->execute();
+
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
                 $transaction->rollBack();
@@ -169,5 +185,12 @@ class PemeriksaanController extends Controller
 
         // print_r($pasien->nama_pasien); die;
         echo Json::encode($tindakan);
+    }
+
+    public function actionHarga($id){
+        $obat = MObat::findOne(['id' => $id]);
+
+        // print_r($pasien->nama_pasien); die;
+        echo Json::encode($obat);
     }
 }

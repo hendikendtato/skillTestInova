@@ -14,6 +14,7 @@ use Yii;
  * @property float|null $total
  * @property float|null $bayar
  * @property float|null $kembalian
+ * @property string|null $tgl_pembayaran
  */
 class MPembayaran extends \yii\db\ActiveRecord
 {
@@ -31,6 +32,7 @@ class MPembayaran extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['tgl_pembayaran'], 'safe'],
             [['nomor_pemeriksaan', 'pasien'], 'integer'],
             [['total', 'bayar', 'kembalian'], 'number'],
             [['nomor_nota'], 'string', 'max' => 50],
@@ -50,6 +52,7 @@ class MPembayaran extends \yii\db\ActiveRecord
             'total' => 'Total',
             'bayar' => 'Bayar',
             'kembalian' => 'Kembalian',
+            'tgl_pembayaran' => 'Tanggal Pembayaran',
         ];
     }
 

@@ -16,6 +16,7 @@ use Yii;
  * @property string|null $diagnosa
  * @property int|null $tindakan
  * @property float|null $biaya_tindakan
+ * @property string $status
  *
  * @property DetailObat[] $detailObats
  * @property MPegawai $dokter0
@@ -44,6 +45,7 @@ class MPemeriksaan extends \yii\db\ActiveRecord
             [['biaya_tindakan'], 'number'],
             [['nomor_pemeriksaan'], 'string', 'max' => 50],
             [['diagnosa'], 'string', 'max' => 255],
+            [['status'], 'string'],
             [['dokter'], 'exist', 'skipOnError' => true, 'targetClass' => MPegawai::class, 'targetAttribute' => ['dokter' => 'id']],
             [['pendaftaran'], 'exist', 'skipOnError' => true, 'targetClass' => PendaftaranPasien::class, 'targetAttribute' => ['pendaftaran' => 'id']],
             [['tindakan'], 'exist', 'skipOnError' => true, 'targetClass' => MTindakan::class, 'targetAttribute' => ['tindakan' => 'id']],
@@ -65,6 +67,7 @@ class MPemeriksaan extends \yii\db\ActiveRecord
             'diagnosa' => 'Diagnosa',
             'tindakan' => 'Tindakan',
             'biaya_tindakan' => 'Biaya Tindakan',
+            'status' => 'Status',
         ];
     }
 

@@ -7,8 +7,8 @@ use yii\grid\GridView;
 /** @var yii\web\View $this */
 /** @var app\models\MPemeriksaan $model */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'M Pemeriksaans', 'url' => ['index']];
+$this->title = "View";
+$this->params['breadcrumbs'][] = ['label' => 'Pemeriksaan', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Apakah Anda yakin ingin menghapus data ini?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -39,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'diagnosa',
             'tindakan0.tindakan',
             'biaya_tindakan',
+            'status',
         ],
     ]) ?>
 

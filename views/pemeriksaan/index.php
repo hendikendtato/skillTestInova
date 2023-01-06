@@ -38,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'diagnosa',
             //'tindakan',
             //'biaya_tindakan',
+            'status',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, MPemeriksaan $model, $key, $index, $column) {
