@@ -31,8 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             // 'id',
             'nomor_nota',
-            'nomor_pemeriksaan',
-            'pasien',
+            'pemeriksaan.nomor_pemeriksaan',
+            'pasien001.nama_pasien',
             'total',
             //'bayar',
             //'kembalian',

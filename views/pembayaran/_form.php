@@ -14,6 +14,7 @@ use app\models\MPasien;
 
 $pasien = ArrayHelper::map(MPasien::find()->asArray()->all(), 'id', 'nama_pasien');
 $pemeriksaan = ArrayHelper::map(MPemeriksaan::find()->asArray()->all(), 'id', 'nomor_pemeriksaan');
+
 ?>
 
 <div class="mpembayaran-form">
@@ -58,40 +59,90 @@ $pemeriksaan = ArrayHelper::map(MPemeriksaan::find()->asArray()->all(), 'id', 'n
         </div>
         <div class="col-md-6" id="detail">
             <table class="table table-striped table-bordered mt-4">
-                <thead>
-                    <tr id="header-detail">
-                        <th>Nama Obat</th>
-                        <th>Jumlah</th>
-                        <th>Harga</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
             </table>
         </div>
     </div>
 
     <?php 
         $script = <<< JS
-
+        $('#mpembayaran-total').attr('readonly','true');
         // Set autofill pasien
         $('#mpembayaran-nomor_pemeriksaan').change(function(){
             var pemeriksaan = $(this).val();
+            var biaya_tindakan = 0;
+            var total = 0;
+            $.get('/skilltest_simklinik/web/pembayaran/tindakan?id='+pemeriksaan, function(data){
+                var data = $.parseJSON(data);
+                var table_obj = $('table');
+
+                var table_row_caption = $('<tr>', {});
+                var table_caption = $('<th colspan="3">', {}).html("Tindakan");
+                table_row_caption.append(table_caption);
+                table_obj.append(table_row_caption);
+
+                var table_row = $('<tr>', {});
+                var table_cell1 = $('<td>', {html: data.tindakan}).attr("colspan","2");
+                var table_cell3 = $('<td>', {html: data.biaya}).attr("style","text-align:right");
+                table_row.append(table_cell1,table_cell3);
+                table_obj.append(table_row);
+
+                biaya_tindakan += parseFloat(data.biaya);
+            });
+
+            $('#detail tr').remove();
             $.get('/skilltest_simklinik/web/pembayaran/detail?id='+pemeriksaan, function(data){
                 var data = $.parseJSON(data);
-                $.each(data, function (i, item) {
-                    console.log(item.harga);
-                    // console.log(item.name);
-                    // string += "<option value=" + item.kode_kab + ">" + item.nama + "</option>";
-                    $('tbody').append("<tr>"+
-                    +"<td>Tess</td>"+
-                    +"</tr>");
+                var table_obj = $('table');
+                var subtotal = 0;
 
+                var table_row_caption2 = $('<tr>', {});
+                var table_caption2 = $('<th>', {}).html("Obat");
+                table_row_caption2.append(table_caption2);
+                table_obj.append(table_row_caption2);
+
+                $.each(data, function (index, result) {
+                    var table_row = $('<tr>', {});
+                    var table_cell1 = $('<td>', {html: result.nama_obat});//result.yourDataAttributes
+                    var table_cell2 = $('<td>', {html: result.jumlah});
+                    var table_cell3 = $('<td>', {html: result.harga}).attr("style","text-align:right");;
+                    table_row.append(table_cell1,table_cell2,table_cell3);
+                    table_obj.append(table_row);
+                    subtotal += parseFloat(result.harga);
                 });
+                total += parseFloat(subtotal) + parseFloat(biaya_tindakan)
+                var table_row2 = $('<tr>', {});
+                var table_cell1 = $('<td colspan="2" style="font-weight:bold">', {}).html("Total");
+                var table_cell3 = $('<td>', {html: total}).attr("style","text-align:right; font-weight:bold");
+                table_row2.append(table_cell1,table_cell3);
+                table_obj.append(table_row2);
+                console.log(subtotal);
+                $('#mpembayaran-total').val(total);
             });
+
+
+            // Set autofill pasien
+            $.get('/skilltest_simklinik/web/pembayaran/ambil-pasien?id='+pemeriksaan, function(data){
+                var data = $.parseJSON(data);
+                console.log(data);
+                $('#mpembayaran-pasien').val(data.pasien);
+            });
+
         });
-        
+
+        $('#mpembayaran-bayar').keyup(function(){
+            var bayar = $(this).val();
+            var total = $('#mpembayaran-total').val();
+
+            var kembalian = parseFloat(bayar) - parseFloat(total);
+            if(kembalian < 0){
+                $('#mpembayaran-kembalian').val(0);
+            } else if(kembalian == null){
+                $('#mpembayaran-kembalian').val(0);
+            } else {
+                $('#mpembayaran-kembalian').val(kembalian);
+            }
+        });
+
         JS;
         $this->registerJs($script);
     ?>

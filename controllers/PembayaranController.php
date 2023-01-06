@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\models\MPembayaran;
 use app\models\MDetailObat;
+use app\models\MPemeriksaan;
+use app\models\MTindakan;
 use app\models\PembayaranSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -136,9 +138,30 @@ class PembayaranController extends Controller
 
     public function actionDetail($id)
     {
-        $detail = MDetailObat::find()->select(['m_obat.nama_obat', 'detail_obat.*'])->leftjoin('m_obat', 'm_obat.id = detail_obat.id_obat')->where(['detail_obat.id_pemeriksaan' => $id])->all();
+        $detail = MDetailObat::find()->select(['m_obat.nama_obat', 'detail_obat.*'])->leftjoin('m_obat', 'm_obat.id = detail_obat.id_obat')->where(['detail_obat.id_pemeriksaan' => $id])->asArray()->all();
 
-        // print_r($pasien->nama_pasien); die;
         echo Json::encode($detail);
+    }
+
+    public function actionTindakan($id)
+    {
+        $pemeriksaan = MPemeriksaan::findOne(['id' => $id]);
+        $tindakan = MTindakan::findOne(['id' => $pemeriksaan->tindakan]);
+        
+        echo Json::encode($tindakan);
+    }
+    public function actionAmbilPasien($id)
+    {
+        $pemeriksaan = MPemeriksaan::findOne(['id' => $id]);
+        
+        echo Json::encode($pemeriksaan);
+    }
+
+    public function actionGrafik()
+    {
+        $model = new MPembayaran;
+        return $this->render('grafik', [
+            'model' => $model,
+        ]);
     }
 }

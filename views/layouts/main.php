@@ -54,6 +54,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'Pendaftaran Pasien', 'url' => ['/pendaftaran-pasien/index']],
             ['label' => 'Tindakan Dokter', 'url' => ['/pemeriksaan/index']],
             ['label' => 'Pembayaran', 'url' => ['/pembayaran/index']],
+            ['label' => 'Laporan', 'url' => ['/site/laporan']],
             Yii::$app->user->isGuest ? 
                 ['label' => 'Login', 'url' => ['/site/login']]
                 : '<li class="nav-item">'

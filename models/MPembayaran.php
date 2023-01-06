@@ -52,4 +52,13 @@ class MPembayaran extends \yii\db\ActiveRecord
             'kembalian' => 'Kembalian',
         ];
     }
+
+    public function getPemeriksaan()
+    {
+        return $this->hasOne(MPemeriksaan::class, ['id' => 'nomor_pemeriksaan']);
+    }
+    public function getPasien001()
+    {
+        return $this->hasOne(MPasien::class, ['id' => 'pasien']);
+    }
 }
